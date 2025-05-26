@@ -21,3 +21,38 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCjEuCGY2OGaMdECEz7eFq_GjeSWhgCELs",
+  authDomain: "marketplace-3bc00.firebaseapp.com",
+  projectId: "marketplace-3bc00",
+  storageBucket: "marketplace-3bc00.firebasestorage.app",
+  messagingSenderId: "809905021561",
+  appId: "1:809905021561:web:11c4ce19d6512091972aa8",
+  measurementId: "G-GQ9GH1CP13"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+document.getElementById('productForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value;
+  const price = parseInt(document.getElementById('price').value);
+  const image = document.getElementById('image').value;
+
+  await addDoc(collection(db, "products"), {
+    name,
+    price,
+    image,
+    verified: true // Auto-approve on submission
+  });
+
+  alert("Product submitted and auto-approved!");
+  document.getElementById('productForm').reset();
+});
